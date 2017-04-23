@@ -1,42 +1,40 @@
 package com.company.teffcode.database_creation;
 
+import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // INSTANCIAR. Abrimos la base de datos "DB_Students" en modo escritura
+        //Abrimos la base de datos 'DBUsuarios' en modo escritura
+        DB_Students db_students =
+                new DB_Students(this, "DBUsuarios", null, 1);
 
-        DB_Students students = new DB_Students(this, "DB_Students", null, 1);
-        SQLiteDatabase db = students.getWritableDatabase();
+        SQLiteDatabase db = db_students.getWritableDatabase();
 
-        // Compruebo que la DB se abre correctamente
+        //Si hemos abierto correctamente la base de datos
+        if(db != null)
+        {
+            //Insertamos 5 usuarios de ejemplo
+            for(int i=1; i<=5; i++)
+            {
+                //Generamos los datos
+                int codigo = i;
+                String nombre = "Usuario" + i;
 
-        if(db != null){
-
-            // crear 10 datos de prueba
-            for (int i=1; i<=10; i++){
-
-                // Generar valores
-                int cod = i;
-                String nameStudent = "Student" + i; // Student1, Student2... bla bla
-
-                // Datos de prueba
-                db.execSQL("INSERT INTO Students (code, name)" +
-                            "VALUES (" + cod + ", " +
-                            nameStudent + ")" );
+                //Insertamos los datos en la tabla Usuarios
+                db.execSQL("INSERT INTO Usuarios (codigo, nombre) " +
+                        "VALUES (" + codigo + ", '" + nombre +"')");
             }
 
-            // Cerrar DB
+            //Cerramos la base de datos
             db.close();
         }
-
-
     }
 }
